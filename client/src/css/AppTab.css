@@ -1,0 +1,30 @@
+.container {
+    padding: 5px;
+    height: 100%;
+    background-color: var(--bg-tab);
+    border: 2px solid #161616;
+
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.container-mobile {
+    padding: 5px;
+    border: 2px solid #161616;
+}
+
+.tab{
+    padding: 1%;
+    width: 100%;
+    height: calc(100% - 41.98px);
+    box-sizing: border-box;
+    background-color: var(--bg-tab-content);
+}
+
+.tab-mobile{
+    padding: 1%;
+    width: 100%;
+    height: 400px;
+    box-sizing: border-box;
+    background-color: var(--bg-tab-content);
+}

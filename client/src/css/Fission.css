@@ -1,0 +1,62 @@
+th{
+    text-align: left;
+}
+
+.fission-content {
+    width: 100%;
+    height: 85%;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
+}
+
+.button {
+    width: 70%;
+    height: 100px;
+}
+
+.tdValue{
+    width: 195px;
+    text-align: right;
+}
+
+.tdPercentage{
+    width: 100px;
+    text-align: right;
+}
+
+.tableMobile{
+    display: block;
+    width: 100%;
+}
+
+.tableMobile > tr{
+    display: block;
+    width: 100%;
+}
+
+.tableMobile > tr > td{
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-left: 2%;
+}
+
+.tableMobile .tdValue, .tableMobile .tdSlash{
+    width: initial;
+    margin-left: 5%;
+}
+
+.tableMobile .tdPercentage{
+    width: initial;
+    margin-left: 5%;
+}
+
+.tableMobile span{
+    margin-left: 5%;
+}

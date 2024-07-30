@@ -1,0 +1,59 @@
+
+
+img{
+    width: 100%;
+    height: 300px;
+}
+
+.menu-content{
+    cursor: pointer;
+    position: relative;
+
+    width: 450px;
+    height: 100%;
+    margin-block: 0;
+    padding: 0;
+
+    animation: fadein;
+    animation-duration: 2s;
+}
+
+.menu-content > div{
+    position: absolute;
+}
+
+.menu-content:hover{
+    transform: scale(110%, 110%);
+}
+
+.MuiPaper-root{
+    color: ghostwhite;
+    background-color: dimgray;
+}
+
+.title{
+    background-color: ghostwhite;
+    color: darkslategray;
+}
+
+.connection-ok{
+    padding: 0 10px;
+    background-color: seagreen;
+    color: black;
+}
+
+.connection-error{
+    padding: 0 10px;
+    background-color: crimson;
+    color: black;
+}
+
+@keyframes fadein {
+    from{
+        opacity: 0;
+    }
+
+    to{
+        opacity: 100%;
+    }
+}

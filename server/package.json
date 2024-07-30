@@ -1,0 +1,26 @@
+{
+  "name": "cc-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test":"ts-node test.ts",
+    "start": "npm-run-all -p server browser",
+    "server": "ts-node index.ts",
+    "browser": "opener http://localhost:56120/"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "opener": "^1.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/ws": "^8.5.10",
+    "express": "^4.19.2",
+    "ws": "^8.17.0"
+  }
+}

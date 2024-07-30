@@ -1,0 +1,73 @@
+:root[theme="dark"]{
+  --bg-tab:#3d3d3d;
+  --bg-tab-content: #242424;
+}
+
+:root[theme="light"]{
+  --bg-tab:#ededed;
+  --bg-tab-content: #cacaca;
+}
+
+header{
+  display: inline-flex;
+  position: relative;
+  width: 100%;
+}
+
+h1{
+  width: 100%;
+  height: 15%;
+  text-align: center;
+}
+
+#root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.klee-one-regular {
+  font-family: "Klee One", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.page{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  width: 95%;
+  height: 95%;
+
+  transition: opacity 1s, visibility 1s;
+
+  opacity: 0;
+  visibility: hidden;
+}
+
+.page-shown{
+  opacity: 1;
+  transition-delay: 1s;
+  visibility: visible;
+}
+
+.back{
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  margin-top: -17.5px;
+  float: left;
+}
+
+.inline{
+  display: inline-flex;
+}
+
+.column-shown{
+  opacity: 1;
+  transition-delay: 0;
+}

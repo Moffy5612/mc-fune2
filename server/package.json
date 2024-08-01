@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "ts-node test.ts",
-    "start": "npm-run-all -p server browser",
-    "server": "ts-node index.ts",
-    "browser": "opener http://localhost:56120/"
+    "test": "ts-node src/test.ts",
+    "start": "ts-node src/index.ts"
   },
   "author": "",
   "license": "ISC",

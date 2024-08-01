@@ -8,7 +8,7 @@ const PAGE_PORT = 56122
 const cc_server=new ws.Server({port:CC_PORT})
 const web_server=new ws.Server({port:PAGE_PORT})
 
-let cc_socket:ws
+let cc_socket:ws|undefined
 
 cc_server.on('connection', (s)=>{
     cc_socket = s

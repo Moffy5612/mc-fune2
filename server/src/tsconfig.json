@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "lib": ["es6", "dom"],  // ここで"dom"を追加
+      "strict": true,
+      "esModuleInterop": true
+    }
+  }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test":"ts-node test.ts",
+    "test": "ts-node test.ts",
     "start": "npm-run-all -p server browser",
     "server": "ts-node index.ts",
     "browser": "opener http://localhost:56120/"
@@ -12,8 +12,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/puppeteer": "^7.0.4",
     "npm-run-all": "^4.1.5",
     "opener": "^1.5.2",
+    "puppeteer": "^22.15.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },

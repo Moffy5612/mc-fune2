@@ -5,6 +5,7 @@ import { createContext, useEffect, useState } from "react";
 import { AppPage } from "./types/AppPage";
 import { AppEffect } from "./types/AppEffect";
 import Fission from "./pages/Fission";
+import Inventory from "./pages/Inventory";
 
 const PageContext = createContext<AppPage | undefined>(undefined);
 
@@ -60,6 +61,7 @@ const App = () => {
         <Menu hidden={page != 0} connection={connection} isMobile = {isMobile}></Menu>
         <Fune hidden={page != 1} isMobile = {isMobile}></Fune>
         <Fission hidden={page != 2} isMobile = {isMobile}></Fission>
+        <Inventory hidden={page != 3} isMobile = {isMobile}></Inventory>
       </PageContext.Provider>
     </>
   )

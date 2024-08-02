@@ -9,12 +9,13 @@ import FuneMap from "../containers/FuneMap";
 import { Box, Button, FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/material";
 import AppTab from "../containers/AppTab";
 import { addAppEffect, PageContext } from "../App";
+import { ReactState } from "../types/App";
 
 const Fune = ({isMobile, hidden}:{isMobile:boolean, hidden:boolean}) => {
 
     const context = useContext(PageContext)
 
-    const[socket, setSocket]:[WebSocket | undefined, Dispatch<SetStateAction<WebSocket | undefined>>] = useState()
+    const[socket, setSocket]:ReactState<WebSocket | undefined> = useState()
     const[transformed, setTransformed] = useState(false)
 
     const[degree,setDegree]=useState(0.0)
@@ -30,7 +31,7 @@ const Fune = ({isMobile, hidden}:{isMobile:boolean, hidden:boolean}) => {
     const[formZ,setFormZ]=useState("200")
     const[formDegree,setFormDegree]=useState("0")
 
-    const[logs, setLogs]:[string[],Dispatch<SetStateAction<string[]>>]=useState([] as string[])
+    const[logs, setLogs]:ReactState<string[]>=useState([] as string[])
 
     const getDirection=()=>{
         if(degree >= -135 && degree < -45)return "North"

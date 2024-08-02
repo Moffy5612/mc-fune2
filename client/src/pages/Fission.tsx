@@ -4,12 +4,13 @@ import { addAppEffect, PageContext } from "../App"
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import "../css/Fission.css"
 import AppTab from "../containers/AppTab"
+import { ReactState } from "../types/App"
 
 const Fission = ({isMobile, hidden}:{isMobile:boolean, hidden:boolean}) => {
 
     const context = useContext(PageContext)
 
-    const [socket, setSocket]:[WebSocket | undefined, Dispatch<SetStateAction<WebSocket | undefined>>] = useState()
+    const [socket, setSocket]:ReactState<WebSocket | undefined> = useState()
     
     const [boilerWater, setBoilerWater] = useState(0);
     const [autoControl, setAutoControl] = useState(false);
@@ -45,7 +46,7 @@ const Fission = ({isMobile, hidden}:{isMobile:boolean, hidden:boolean}) => {
     const [fissionWasteCap, setFissionWasteCap] = useState(0);
     const [fissionDamage, setFissionDamage] = useState(0);
 
-    const [newBurnRate, setNewBurnRate]:[number | undefined, Dispatch<SetStateAction<number | undefined>>] = useState()
+    const [newBurnRate, setNewBurnRate]:ReactState<number|undefined> = useState()
 
     useEffect(()=>{
         addAppEffect({

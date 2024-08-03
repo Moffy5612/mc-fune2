@@ -57,11 +57,11 @@ const App = () => {
 
   return (
     <>
-      <PageContext.Provider value={{page, setPage}}>
-        <Menu hidden={page != 0} connection={connection} isMobile = {isMobile}></Menu>
-        <Fune hidden={page != 1} isMobile = {isMobile}></Fune>
-        <Fission hidden={page != 2} isMobile = {isMobile}></Fission>
-        <Inventory hidden={page != 3} isMobile = {isMobile}></Inventory>
+      <PageContext.Provider value={{page, setPage, isMobile}}>
+        <Menu id={0} connection={connection}></Menu>
+        <Fune id={1}></Fune>
+        <Fission id={2}></Fission>
+        <Inventory id={3}></Inventory>
       </PageContext.Provider>
     </>
   )

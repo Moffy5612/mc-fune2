@@ -1,17 +1,26 @@
 import { Accordion, AccordionDetails, AccordionSummary, Fade, Grid, Typography } from "@mui/material"
 import "../css/AppTab.css"
-import React from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { AppTabProps } from "../types/AppTab"
 import { ExpandMore } from "@mui/icons-material"
+import { PageContext } from "../App"
 
-const AppTab = ({isMobile, hidden, title, xs = 1, delay, scroll = false, children}:React.PropsWithChildren<AppTabProps>) => {
+const AppTab = ({id, title, xs = 16, delay, scroll = false, children}:React.PropsWithChildren<AppTabProps>) => {
+    const context = useContext(PageContext)
+    
+    const [hidden, setHidden] = useState(id != context?.page)
+
+    useEffect(() => {
+        setHidden(id != context?.page)
+    }, [context?.page])
+
     return(
         <Grid 
             item
-            xs={xs}
+            xs={context?.isMobile ? 16 : xs} 
         >
             {
-                isMobile && 
+                context?.isMobile && 
                 <Fade in={!hidden} style={{
                     transitionDelay: (1 + delay * 0.3)+"s"
                 }}>
@@ -34,7 +43,7 @@ const AppTab = ({isMobile, hidden, title, xs = 1, delay, scroll = false, childre
                 </Fade>
             }
             {
-                !isMobile && 
+                !context?.isMobile && 
                 <div 
                     className={"container"+(hidden ? "":" column-shown")}
                     style={{

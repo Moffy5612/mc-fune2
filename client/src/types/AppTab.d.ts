@@ -1,6 +1,5 @@
 export type AppTabProps = {
-    isMobile:boolean, 
-    hidden:boolean, 
+    id: number,
     title?:string, 
     xs?:number, 
     delay:number, 

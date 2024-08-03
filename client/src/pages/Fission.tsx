@@ -1,12 +1,16 @@
-import { ArrowBack } from "@mui/icons-material"
-import { Box, Button, Grid, Typography } from "@mui/material"
+import { Button, Typography } from "@mui/material"
 import { addAppEffect, PageContext } from "../App"
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
 import "../css/Fission.css"
 import AppTab from "../containers/AppTab"
 import { ReactState } from "../types/App"
+import AppBox from "../containers/AppBox"
+import AppGrid from "../containers/AppGrid"
+import AppInline from "../containers/AppInline"
+import AppLogTab from "../containers/AppLogTab"
+import AppUtils from "../utils/AppUtils"
 
-const Fission = ({isMobile, hidden}:{isMobile:boolean, hidden:boolean}) => {
+const Fission = ({id}:{id: number}) => {
 
     const context = useContext(PageContext)
 
@@ -25,7 +29,7 @@ const Fission = ({isMobile, hidden}:{isMobile:boolean, hidden:boolean}) => {
     const [turbine2SteamCap, setTurbine2SteamCap] = useState(0);
     const [boilerWaterCap, setBoilerWaterCap] = useState(0);
     const [fissionFuelCap, setFissionFuelCap] = useState(0);
-    const [logs, setLogs]:[string[],Dispatch<SetStateAction<string[]>>]=useState([] as string[])
+    const [logs, setLogs]:ReactState<string[]>=useState([] as string[])
     const [turbine3SteamCap, setTurbine3SteamCap] = useState(0);
     const [turbine2Steam, setTurbine2Steam] = useState(0);
     const [fissionWaste, setFissionWaste] = useState(0);
@@ -87,8 +91,7 @@ const Fission = ({isMobile, hidden}:{isMobile:boolean, hidden:boolean}) => {
                 setBoilerCoolant(data.boilerCoolant);
                 setFissionWasteCap(data.fissionWasteCap);
                 setFissionDamage(data.fissionDamage)
-                if(Object.keys(data.logs).length === 0)setLogs([])
-                else setLogs(data.logs)
+                AppUtils.setLogs(data.logs, setLogs)
             },
         })
     },[])
@@ -154,185 +157,177 @@ const Fission = ({isMobile, hidden}:{isMobile:boolean, hidden:boolean}) => {
     }
 
     return(
-        <Box className={"page"+(hidden ? "":" page-shown")} alignContent={"center"}>
-            <header>
-                <h1>Fission</h1>
-                <ArrowBack className="back" fontSize="large" onClick={()=>{context?.setPage(0)}}/>
-            </header>
-            <Grid container spacing={2} className="fission-content">
-                <Grid item container xs={isMobile ? 16 : 6}>
-                    <AppTab isMobile={isMobile} hidden={hidden} delay={0} xs={16} title="Info">
-                        <div className="inline">
-                            <h2>Status: </h2>
-                            <h2 style={{marginLeft:20, color:(fissionStatus ? "seagreen" : "crimson")}}>{fissionStatus ? "Enabled" : "Disabled"}</h2>
+        <AppBox id={id} title="Fission">
+            <AppTab id={id} delay={0} xs={6} title="Info">
+                <div className="inline">
+                    <h2>Status: </h2>
+                    <h2 style={{marginLeft:20, color:(fissionStatus ? "seagreen" : "crimson")}}>{fissionStatus ? "Enabled" : "Disabled"}</h2>
+                </div>
+                <br></br>
+                <div className="inline">
+                    <h2>Auto-Controled Mode: </h2>
+                    <h2 style={{marginLeft:20, color:(autoControl ? "seagreen" : "crimson")}}>{autoControl ? "Enabled" : "Disabled"}</h2>
+                </div>
+                <br></br>
+                <hr></hr>
+                <div style={{height:context?.isMobile ? 200 : 490, overflowY:"scroll"}}>
+                    <h2>Fission Reactor</h2>
+                    <div style={{marginLeft: 10}}>
+                        <table className={context?.isMobile? "tableMobile" : undefined}> 
+                            <tr>
+                                <th><Typography variant="h6">・Burn Rate: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{fissionBurnRate} mB/t</Typography></td>
+                            </tr>
+                            <tr>
+                                <th><Typography variant="h6">・Temperature: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{Math.round(fissionTemperature * 10000) / 10000} K</Typography></td>
+                            </tr>
+                            <tr>
+                                <th><Typography variant="h6">・Damage: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{Math.round(fissionDamage * 10000) / 10000} %</Typography></td>
+                            </tr>
+                            <br></br>
+                            <tr>
+                                <th><Typography variant="h6">・Coolant: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{fissionCoolantAmount} mB </Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{fissionCoolantCap} mB</Typography></td>
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(fissionCoolantAmount, fissionCoolantCap)}%)</Typography></td>
+                                <td><Typography variant="h6">{fissionCoolantName}</Typography></td>
+                            </tr>
+                            <tr>
+                                <th><Typography variant="h6">・Fuel: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{fissionFuel} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{fissionFuelCap} mB</Typography></td>
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(fissionFuel, fissionFuel)}%)</Typography></td>
+                            </tr>
+                            <tr>
+                                <th><Typography variant="h6">・Heated Coolant: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{fissionHeatedCoolantAmount} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{fissionHeatedCoolantCap} mB</Typography></td> 
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(fissionHeatedCoolantAmount, fissionHeatedCoolantCap)}%)</Typography></td>
+                                <td><Typography variant="h6">{fissionHeatedCoolantName}</Typography></td>                                
+                            </tr>
+                            <tr>
+                                <th><Typography variant="h6">・Waste: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{fissionWaste} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{fissionWaste} mB</Typography></td>
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(fissionWaste, fissionWasteCap)}%)</Typography></td>                             
+                            </tr>
+                        </table>
+                    </div>
+                    <h2>Boiler</h2>
+                    <div style={{marginLeft: 10}}>
+                        <table className={context?.isMobile? "tableMobile" : ""}>
+                            <tr>
+                                <th><Typography variant="h6">・Heated Coolant: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{boilerHeatedCoolant} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{boilerHeatedCoolantCap} mB</Typography></td>
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(boilerHeatedCoolant, boilerHeatedCoolantCap)}%)</Typography></td>                             
+                            </tr>
+                            <tr>
+                                <th><Typography variant="h6">・Water: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{boilerWater} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{boilerWaterCap} mB</Typography></td> 
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(boilerWater, boilerWaterCap)}%)</Typography></td>                             
+                            </tr>
+                            <tr>
+                                <th><Typography variant="h6">・Coolant: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{boilerCoolant} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{boilerCoolantCap} mB</Typography></td>
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(boilerCoolant, boilerCoolantCap)}%)</Typography></td>                             
+                            </tr>
+                            <tr>
+                                <th><Typography variant="h6">・Steam: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{boilerSteam} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{boilerSteamCap} mB</Typography></td>
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(boilerSteam, boilerSteamCap)}%)</Typography></td>                             
+                            </tr>
+                        </table>
+                    </div>
+                    <h2>Turbine1</h2>
+                    <div style={{marginLeft: 10}}>
+                        <table className={context?.isMobile? "tableMobile" : ""}>
+                            <tr>
+                                <th><Typography variant="h6">・Steam: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{turbine1Steam} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{turbine1SteamCap} mB</Typography></td>
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(turbine1Steam, turbine1SteamCap)}%)</Typography></td>                             
+                            </tr>
+                            <tr>
+                                <td><Typography variant="h6">・Production Rate: </Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{turbine1ProductionRate} FE</Typography></td>                           
+                            </tr>
+                        </table>
+                    </div>
+                    <h2>Turbine2</h2>
+                    <div style={{marginLeft: 10}}>
+                        <table className={context?.isMobile? "tableMobile" : ""}>
+                            <tr>
+                                <th><Typography variant="h6">・Steam: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{turbine2Steam} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{turbine2SteamCap} mB</Typography></td>
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(turbine2Steam, turbine2SteamCap)}%)</Typography></td>                             
+                            </tr>
+                            <tr>
+                                <td><Typography variant="h6">・Production Rate: </Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{turbine2ProductionRate} FE</Typography></td>                           
+                            </tr>
+                        </table>
+                    </div>
+                    <h2>Turbine3</h2>
+                    <div style={{marginLeft: 10}}>
+                        <table className={context?.isMobile? "tableMobile" : ""}>
+                            <tr>
+                                <th><Typography variant="h6">・Steam: </Typography></th>
+                                <td className="tdValue"><Typography variant="h6">{turbine3Steam} mB</Typography></td>
+                                <td className="tdSlash"><Typography variant="h6">/</Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{turbine3SteamCap} mB</Typography></td>
+                                <td className="tdPercentage"><Typography variant="h6">({getPercentage(turbine3Steam, turbine3SteamCap)}%)</Typography></td>                             
+                            </tr>
+                            <tr>
+                                <td><Typography variant="h6">・Production Rate: </Typography></td>
+                                <td className="tdValue"><Typography variant="h6">{turbine3ProductionRate} FE</Typography></td>                           
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </AppTab>
+            <AppGrid xs={6}>
+                <AppTab id={id} delay={1} xs={16} title="Manual Control">
+                    <AppInline style={{width: "100%", height:"100%", overflowY:context?.isMobile? "scroll" : undefined}}>
+                        <div className="btn-group" style={{borderBottom: context?.isMobile ? "1px dotted gray" : undefined}}>
+                            <Button className="button" style={(fissionStatus ? disabledBtnStyle : activateBtnStyle)} disabled={fissionStatus} onClick={activate}>Activate</Button>
+                            <Button className="button" style={(!fissionStatus ? disabledBtnStyle : scramBtnStyle)} disabled={!fissionStatus} onClick={scram}>Scramble</Button>
                         </div>
-                        <br></br>
-                        <div className="inline">
-                            <h2>Auto-Controled Mode: </h2>
-                            <h2 style={{marginLeft:20, color:(autoControl ? "seagreen" : "crimson")}}>{autoControl ? "Enabled" : "Disabled"}</h2>
+                        <div style={{width:"50%", borderLeft: context?.isMobile ? undefined : "1px dotted gray", padding:20}}>
+                            <h3>Burn Rate</h3>
+                            <input type="number" min="0" max="1435" style={{width:150}} placeholder="New Burn Rate" value={newBurnRate} onChange={(e)=>{setNewBurnRate(parseInt(e.target.value))}}></input> mB/t
+                            <br></br>
+                            <br></br>
+                            <Button variant="contained" onClick={changeBurnRate}>send</Button>
                         </div>
-                        <br></br>
-                        <hr></hr>
-                        <div style={{height:isMobile ? 200 : 490, overflowY:"scroll"}}>
-                            <h2>Fission Reactor</h2>
-                            <div style={{marginLeft: 10}}>
-                                <table className={isMobile? "tableMobile" : undefined}> 
-                                    <tr>
-                                        <th><Typography variant="h6">・Burn Rate: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{fissionBurnRate} mB/t</Typography></td>
-                                    </tr>
-                                    <tr>
-                                        <th><Typography variant="h6">・Temperature: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{Math.round(fissionTemperature * 10000) / 10000} K</Typography></td>
-                                    </tr>
-                                    <tr>
-                                        <th><Typography variant="h6">・Damage: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{Math.round(fissionDamage * 10000) / 10000} %</Typography></td>
-                                    </tr>
-                                    <br></br>
-                                    <tr>
-                                        <th><Typography variant="h6">・Coolant: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{fissionCoolantAmount} mB </Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{fissionCoolantCap} mB</Typography></td>
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(fissionCoolantAmount, fissionCoolantCap)}%)</Typography></td>
-                                        <td><Typography variant="h6">{fissionCoolantName}</Typography></td>
-                                    </tr>
-                                    <tr>
-                                        <th><Typography variant="h6">・Fuel: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{fissionFuel} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{fissionFuelCap} mB</Typography></td>
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(fissionFuel, fissionFuel)}%)</Typography></td>
-                                    </tr>
-                                    <tr>
-                                        <th><Typography variant="h6">・Heated Coolant: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{fissionHeatedCoolantAmount} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{fissionHeatedCoolantCap} mB</Typography></td> 
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(fissionHeatedCoolantAmount, fissionHeatedCoolantCap)}%)</Typography></td>
-                                        <td><Typography variant="h6">{fissionHeatedCoolantName}</Typography></td>                                
-                                    </tr>
-                                    <tr>
-                                        <th><Typography variant="h6">・Waste: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{fissionWaste} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{fissionWaste} mB</Typography></td>
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(fissionWaste, fissionWasteCap)}%)</Typography></td>                             
-                                    </tr>
-                                </table>
-                            </div>
-                            <h2>Boiler</h2>
-                            <div style={{marginLeft: 10}}>
-                                <table className={isMobile? "tableMobile" : ""}>
-                                    <tr>
-                                        <th><Typography variant="h6">・Heated Coolant: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{boilerHeatedCoolant} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{boilerHeatedCoolantCap} mB</Typography></td>
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(boilerHeatedCoolant, boilerHeatedCoolantCap)}%)</Typography></td>                             
-                                    </tr>
-                                    <tr>
-                                        <th><Typography variant="h6">・Water: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{boilerWater} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{boilerWaterCap} mB</Typography></td> 
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(boilerWater, boilerWaterCap)}%)</Typography></td>                             
-                                    </tr>
-                                    <tr>
-                                        <th><Typography variant="h6">・Coolant: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{boilerCoolant} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{boilerCoolantCap} mB</Typography></td>
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(boilerCoolant, boilerCoolantCap)}%)</Typography></td>                             
-                                    </tr>
-                                    <tr>
-                                        <th><Typography variant="h6">・Steam: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{boilerSteam} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{boilerSteamCap} mB</Typography></td>
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(boilerSteam, boilerSteamCap)}%)</Typography></td>                             
-                                    </tr>
-                                </table>
-                            </div>
-                            <h2>Turbine1</h2>
-                            <div style={{marginLeft: 10}}>
-                                <table className={isMobile? "tableMobile" : ""}>
-                                    <tr>
-                                        <th><Typography variant="h6">・Steam: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{turbine1Steam} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{turbine1SteamCap} mB</Typography></td>
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(turbine1Steam, turbine1SteamCap)}%)</Typography></td>                             
-                                    </tr>
-                                    <tr>
-                                        <td><Typography variant="h6">・Production Rate: </Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{turbine1ProductionRate} FE</Typography></td>                           
-                                    </tr>
-                                </table>
-                            </div>
-                            <h2>Turbine2</h2>
-                            <div style={{marginLeft: 10}}>
-                                <table className={isMobile? "tableMobile" : ""}>
-                                    <tr>
-                                        <th><Typography variant="h6">・Steam: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{turbine2Steam} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{turbine2SteamCap} mB</Typography></td>
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(turbine2Steam, turbine2SteamCap)}%)</Typography></td>                             
-                                    </tr>
-                                    <tr>
-                                        <td><Typography variant="h6">・Production Rate: </Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{turbine2ProductionRate} FE</Typography></td>                           
-                                    </tr>
-                                </table>
-                            </div>
-                            <h2>Turbine3</h2>
-                            <div style={{marginLeft: 10}}>
-                                <table className={isMobile? "tableMobile" : ""}>
-                                    <tr>
-                                        <th><Typography variant="h6">・Steam: </Typography></th>
-                                        <td className="tdValue"><Typography variant="h6">{turbine3Steam} mB</Typography></td>
-                                        <td className="tdSlash"><Typography variant="h6">/</Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{turbine3SteamCap} mB</Typography></td>
-                                        <td className="tdPercentage"><Typography variant="h6">({getPercentage(turbine3Steam, turbine3SteamCap)}%)</Typography></td>                             
-                                    </tr>
-                                    <tr>
-                                        <td><Typography variant="h6">・Production Rate: </Typography></td>
-                                        <td className="tdValue"><Typography variant="h6">{turbine3ProductionRate} FE</Typography></td>                           
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </AppTab>
-                </Grid>
-                <Grid item container xs={isMobile ? 16 : 6} spacing={2}>
-                    <AppTab isMobile={isMobile} hidden={hidden} delay={1} xs={16} title="Manual Control">
-                        <div className={isMobile ? "" : "inline"} style={{width: "100%", height:"100%", overflowY:isMobile? "scroll" : undefined}}>
-                            <div className="btn-group" style={{borderBottom: isMobile ? "1px dotted gray" : undefined}}>
-                                <Button className="button" style={(fissionStatus ? disabledBtnStyle : activateBtnStyle)} disabled={fissionStatus} onClick={activate}>Activate</Button>
-                                <Button className="button" style={(!fissionStatus ? disabledBtnStyle : scramBtnStyle)} disabled={!fissionStatus} onClick={scram}>Scramble</Button>
-                            </div>
-                            <div style={{width:"50%", borderLeft: isMobile ? undefined : "1px dotted gray", padding:20}}>
-                                <h3>Burn Rate</h3>
-                                <input type="number" min="0" max="1435" style={{width:150}} placeholder="New Burn Rate" value={newBurnRate} onChange={(e)=>{setNewBurnRate(parseInt(e.target.value))}}></input> mB/t
-                                <br></br>
-                                <br></br>
-                                <Button variant="contained" onClick={changeBurnRate}>send</Button>
-                            </div>
-                        </div>
-                    </AppTab>
-                    <AppTab isMobile={isMobile} hidden={hidden} delay={2} xs={isMobile ? 16 : 6} title="Auto Control">
+                    </AppInline>
+                </AppTab>
+                <AppGrid xs={16}>
+                    <AppTab id={id} delay={2} xs={6} title="Auto Control">
                         <div style={{width:"100%", height:"100%", display:"flex", flexDirection:"column", justifyContent:"center"}}>
                             <Button style={{width:"70%", height:100, margin:"auto", fontSize:28}} variant="contained" onClick={()=>{sendCmd("auto")}}>toggle</Button>
                         </div>
                     </AppTab>
-                    <AppTab isMobile={isMobile} hidden={hidden} delay={3} xs={isMobile ? 16 : 6} title="Log" scroll>
-                        {logs.map((log)=>{return (<p style={{margin:3}}>{log}</p>) })}
-                    </AppTab>
-                </Grid>
-            </Grid>
-        </Box>
+                    <AppLogTab id={id} delay={3} xs={6} logs={logs}></AppLogTab>
+                </AppGrid>
+            </AppGrid>
+        </AppBox>
     )
 }
 

@@ -25,10 +25,12 @@ const AppTab = ({id, title, xs = 16, delay, scroll = false, children}:React.Prop
                     transitionDelay: (1 + delay * 0.3)+"s"
                 }}>
                     <Accordion 
-                        className={"container-mobile"+(hidden ? "":" column-shown")}
+                        className={"container-mobile"}
                         style={{
                             color: "initial",
                             backgroundColor: "var(--bg-tab)",
+                            opacity: hidden ? 0 : 1,
+                            transitionDelay: hidden ? "0" : "1s"
                         }}
                     >
                         <AccordionSummary expandIcon={<ExpandMore/>}>
@@ -45,8 +47,9 @@ const AppTab = ({id, title, xs = 16, delay, scroll = false, children}:React.Prop
             {
                 !context?.isMobile && 
                 <div 
-                    className={"container"+(hidden ? "":" column-shown")}
+                    className={"container"}
                     style={{
+                        opacity: hidden ? 0 : 1,
                         transitionDelay: (1 + delay * 0.3)+"s"
                     }} 
                 >

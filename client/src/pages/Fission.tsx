@@ -1,6 +1,6 @@
 import { Button, Typography } from "@mui/material"
 import { addAppEffect, PageContext } from "../App"
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import "../css/Fission.css"
 import AppTab from "../containers/AppTab"
 import { ReactState } from "../types/App"

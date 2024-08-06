@@ -16,13 +16,10 @@ data.set_value("logs",{})
 
 while true do
     local shipdata = {
-        id=1,
-        data={
-            pos=ship.getWorldspacePosition();
-            degree=getShipDegree();
-            transformed=data.get_value("transformed");
-            logs=data.get_value("logs")
-        }
+        pos=ship.getWorldspacePosition();
+        degree=getShipDegree();
+        transformed=data.get_value("transformed");
+        logs=data.get_value("logs")
     }
     rednet.send(22,textutils.serialiseJSON(shipdata),"master")
     os.sleep(0.05)

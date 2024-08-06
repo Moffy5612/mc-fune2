@@ -27,11 +27,7 @@ while true do
     end
 
     local tab = data.get_all()
-    local send = {
-        id = 10,
-        data = tab
-    }
-    rednet.send(22, textutils.serialiseJSON(send), "master")
+    rednet.send(22, textutils.serialiseJSON(tab), "master")
 
     os.sleep(0.05)
 end

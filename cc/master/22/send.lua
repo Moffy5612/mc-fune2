@@ -1,4 +1,8 @@
 while true do 
     id, msg = rednet.receive("master")
-    ws.send(msg)
+    local send = {
+        id=id
+        data=textutils.unserialiseJSON(msg)
+    }
+    ws.send(textutils.serialiseJSON(send))
 end
